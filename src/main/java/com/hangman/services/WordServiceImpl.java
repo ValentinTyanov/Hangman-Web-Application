@@ -35,8 +35,7 @@ public class WordServiceImpl implements WordService {
 
   @Override
   public String generateWord() {
-    Random random = new Random();
-    int index = random.nextInt(WORDS.length);
+    int index = new Random().nextInt(WORDS.length);
     return WORDS[index];
   }
 }
