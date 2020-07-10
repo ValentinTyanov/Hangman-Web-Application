@@ -25,8 +25,8 @@
 			</c:forEach>
 			<br/>
 			<br/>
-			<p>Attempts left: ${game.attemptsLeft}</p>
 		</div>
+		<p>Attempts left: ${game.attemptsLeft}</p>
 		<br/>
 		<div class="cheat">
 			<form class="cheatButton" method="POST" action="${game.id}/real-word">

@@ -1,10 +1,10 @@
+package com.hangman.services;
+
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.mockito.ArgumentMatchers.anyString;
 import static org.mockito.Mockito.when;
 import com.hangman.entities.Game;
 import com.hangman.repositories.GameRepository;
-import com.hangman.services.GameServiceImpl;
-import com.hangman.services.WordService;
 import java.util.Arrays;
 import java.util.HashSet;
 import org.junit.jupiter.api.Test;
@@ -21,14 +21,14 @@ public class GameServiceTests {
   @InjectMocks public GameServiceImpl gameService;
 
   @Test
-  public void shouldSuccessfully_CreateGame_AndReturn_GameId() {
+  public void shouldSuccessfullyCreateGameAndReturnGameId() {
     when(wordService.generateWord()).thenReturn("Arson");
     String gameId = gameService.createGame();
     assertThat(gameId).isNotNull();
   }
 
   @Test
-  public void shouldHaveAttemptsLeft_EqualTo_WordLength() {
+  public void shouldHaveAttemptsLeftEqualToWordLength() {
     Game game = new Game();
     String word = "Candle";
     game.setWord(word);
@@ -37,7 +37,7 @@ public class GameServiceTests {
   }
 
   @Test
-  public void shouldNotBe_Empty_OriginalLetterList_AfterFill() {
+  public void shouldNotBeEmptyOriginalLetterListAfterFill() {
     Game game = new Game();
     game.setWord("Bacteria");
     gameService.fillLetterLists(game);
@@ -45,7 +45,7 @@ public class GameServiceTests {
   }
 
   @Test
-  public void shouldNotContain_Underscore_In_OriginalLetterList_AfterFill() {
+  public void shouldNotContainUnderscoreInOriginalLetterListAfterFill() {
     Game game = new Game();
     game.setWord("Hospital");
     gameService.fillLetterLists(game);
@@ -53,7 +53,7 @@ public class GameServiceTests {
   }
 
   @Test
-  public void shouldNotBe_Empty_HiddenLetterList_AfterFill() {
+  public void shouldNotBeEmptyHiddenLetterListAfterFill() {
     Game game = new Game();
     game.setWord("Patriarchy");
     gameService.fillLetterLists(game);
@@ -61,7 +61,7 @@ public class GameServiceTests {
   }
 
   @Test
-  public void shouldInitiallyContain_Underscore_In_HiddenLetterList_AfterFill() {
+  public void shouldInitiallyContainUnderscoreInHiddenLetterListAfterFill() {
     Game game = new Game();
     game.setWord("Pestilence");
     gameService.fillLetterLists(game);
@@ -69,7 +69,7 @@ public class GameServiceTests {
   }
 
   @Test
-  public void shouldReduce_Attempts_After_SetLetter() {
+  public void shouldReduceAttemptsAfterSetLetter() {
     Game game = new Game();
     game.setWord("Quicksort");
     String word = game.getWord();
@@ -82,7 +82,7 @@ public class GameServiceTests {
   }
 
   @Test
-  public void shouldReduce_Attempts_v2_But_currentLetter_IsNow_Null() {
+  public void shouldReduceAttempts_v2_ButcurrentLetterIsNowNull() {
     Game game = new Game();
     game.setWord("Quicksort");
     String word = game.getWord();
@@ -95,7 +95,7 @@ public class GameServiceTests {
   }
 
   @Test
-  public void shouldRemove_Letter_From_Alphabet_After_SetLetter() {
+  public void shouldRemoveLetterFromAlphabetAfterSetLetter() {
     Game game = new Game();
     game.setWord("Quicksort");
     String word = game.getWord();
