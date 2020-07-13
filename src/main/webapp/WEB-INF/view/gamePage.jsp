@@ -36,9 +36,6 @@
 
 		<div class="holder">
 			<form class="buttons" method="POST">
-				<!-- праща към същият път, когато не е уточнено специфично  -->
-				<!-- Value-то на бутона се подава като RequestParam при заявката, затова го улавяме
-				ч/з @RequestParam в контролера по името му letter -->
 				<c:set var="alphabet" value="${game.unusedLetters}"/>
 				<c:forEach var="unusedLetter" items="${alphabet}">
 					<input type="submit" name="letter" value="${unusedLetter}"/>
