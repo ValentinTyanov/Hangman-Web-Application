@@ -1,6 +1,7 @@
 package com.hangman.services;
 
-import static org.assertj.core.api.Assertions.assertThat;
+import static org.assertj.core.api.Assertions.*;
+
 import static org.mockito.ArgumentMatchers.anyString;
 import static org.mockito.Mockito.when;
 import com.hangman.entities.Game;
@@ -69,7 +70,7 @@ public class GameServiceTests {
   }
 
   @Test
-  public void shouldReduceAttemptsAfterSetLetter() {
+  public void shouldReduceAttemptsAfterCorrectTryLetter() {
     Game game = new Game();
     game.setWord("Quicksort");
     String word = game.getWord();
@@ -77,12 +78,12 @@ public class GameServiceTests {
     gameService.fillLetterLists(game);
     game.setUnusedLetters(new HashSet<Character>('t'));
     when(gameService.getGame(anyString())).thenReturn(game);
-    gameService.setLetter("asd123", 't');
+    gameService.tryLetter("asd123", 't');
     assertThat(game.getAttemptsLeft()).isEqualTo(word.length() - 1);
   }
 
   @Test
-  public void shouldReduceAttempts_v2_ButcurrentLetterIsNowNull() {
+  public void shouldReduceAttempts_v2_AfterWrongTryLetter() {
     Game game = new Game();
     game.setWord("Quicksort");
     String word = game.getWord();
@@ -90,12 +91,12 @@ public class GameServiceTests {
     gameService.fillLetterLists(game);
     game.setUnusedLetters(new HashSet<Character>('t'));
     when(gameService.getGame(anyString())).thenReturn(game);
-    gameService.setLetter("asd123", 'v');
+    gameService.tryLetter("asd123", 'v');
     assertThat(game.getAttemptsLeft()).isEqualTo(word.length() - 1);
   }
 
   @Test
-  public void shouldRemoveLetterFromAlphabetAfterSetLetter() {
+  public void shouldRemoveLetterFromAlphabetAfterTryLetter() {
     Game game = new Game();
     game.setWord("Quicksort");
     String word = game.getWord();
@@ -103,7 +104,7 @@ public class GameServiceTests {
     gameService.fillLetterLists(game);
     game.setUnusedLetters(new HashSet<Character>(Arrays.asList('r', 't')));
     when(gameService.getGame(anyString())).thenReturn(game);
-    gameService.setLetter("asd123", 't');
+    gameService.tryLetter("asd123", 't');
     assertThat(game.getUnusedLetters().size()).isEqualTo(1);
   }
 }

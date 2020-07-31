@@ -12,7 +12,7 @@ public class GameRepositoryTests {
   private GameRepositoryImpl gameRepository = new GameRepositoryImpl();
 
   @Test
-  public void shouldAddGameToCollectionAndRetrieveGame_ById() {
+  public void shouldAddGameToCollectionAndRetrieveGameById() {
     Game game = new Game();
     game.setId("asdfg2334");
     gameRepository.addGame(game);

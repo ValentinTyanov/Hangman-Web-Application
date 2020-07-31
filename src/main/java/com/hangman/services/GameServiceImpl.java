@@ -8,6 +8,7 @@ import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 import java.util.UUID;
+import java.util.function.Predicate;
 import java.util.stream.IntStream;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -15,8 +16,14 @@ import org.springframework.stereotype.Service;
 @Service
 public class GameServiceImpl implements GameService {
 
-  @Autowired private WordService wordService;
-  @Autowired private GameRepository gameRepository;
+  private WordService wordService;
+  private GameRepository gameRepository;
+
+  @Autowired
+  public GameServiceImpl(WordService wordService, GameRepository gameRepository) {
+    this.wordService = wordService;
+    this.gameRepository = gameRepository;
+  }
 
   @Override
   public String createGame() {
@@ -73,7 +80,7 @@ public class GameServiceImpl implements GameService {
   }
 
   @Override
-  public void setLetter(String id, char letter) {
+  public void tryLetter(String id, char letter) {
     Game game = getGame(id);
 
     Character currentLetter =
@@ -92,5 +99,16 @@ public class GameServiceImpl implements GameService {
     }
     game.setAttemptsLeft(game.getAttemptsLeft() - 1);
     game.getUnusedLetters().remove(Character.valueOf(letter));
+  }
+
+  public boolean solvedPuzzle(String id) {
+    Predicate<Game> isSolved =
+        g -> g.getId().equals(id) && !(g.getHiddenLettersList().contains('_'));
+    return gameRepository.exists(isSolved);
+  }
+
+  public boolean failedPuzzle(String id) {
+    Predicate<Game> hasFailed = g -> g.getId().equals(id) && g.getAttemptsLeft() <= 0;
+    return gameRepository.exists(hasFailed);
   }
 }

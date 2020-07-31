@@ -1,6 +1,6 @@
 package com.hangman.controllers;
 
-import com.hangman.Config;
+import com.hangman.HangmanApplication;
 import com.hangman.services.GameService;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -20,7 +20,7 @@ import org.springframework.web.context.WebApplicationContext;
 
 @ExtendWith(SpringExtension.class)
 @WebAppConfiguration
-@ContextConfiguration(classes = Config.class)
+@ContextConfiguration(classes = HangmanApplication.class)
 public class GameControllerTests {
 
   @Autowired GameService gameService;

@@ -10,5 +10,5 @@ public interface GameService {
 
   public Game getGame(String gameId);
 
-  public void setLetter(String gameId, char letter);
+  public void tryLetter(String gameId, char letter);
 }

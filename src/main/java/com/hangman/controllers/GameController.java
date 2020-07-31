@@ -14,7 +14,12 @@ import org.springframework.web.bind.annotation.RequestParam;
 @Controller
 public class GameController {
 
-  @Autowired private GameServiceImpl theGameService;
+  private GameServiceImpl gameService;
+
+  @Autowired
+  public GameController(GameServiceImpl gameService) {
+    this.gameService = gameService;
+  }
 
   @GetMapping("/")
   public String showPage() {
@@ -23,19 +28,19 @@ public class GameController {
 
   @PostMapping("/games")
   public String createGame() {
-    String gameId = theGameService.createGame();
+    String gameId = gameService.createGame();
     return "redirect:/games/" + gameId;
   }
 
   @GetMapping("/games/{gameid}")
-  public String showGame(Model theModel, @PathVariable String gameid) {
-    Game game = theGameService.getGame(gameid);
-    theModel.addAttribute("game", game);
+  public String showGame(Model model, @PathVariable String gameid) {
+    Game game = gameService.getGame(gameid);
+    model.addAttribute("game", game);
 
-    if (!game.getHiddenLettersList().contains('_')) {
+    if (gameService.solvedPuzzle(gameid)) {
       return "victory";
     }
-    if (game.getAttemptsLeft() <= 0) {
+    if (gameService.failedPuzzle(gameid)) {
       return "gameOver";
     }
 
@@ -43,15 +48,15 @@ public class GameController {
   }
 
   @PostMapping("/games/{gameid}")
-  public String setLetter(Model theModel, @PathVariable String gameid, @RequestParam char letter) {
-    theGameService.setLetter(gameid, letter);
+  public String tryLetter(Model theModel, @PathVariable String gameid, @RequestParam char letter) {
+    gameService.tryLetter(gameid, letter);
     return "redirect:/games/{gameid}";
   }
 
   @PostMapping("/games/{gameid}/real-word")
-  public String showWord(Model theModel, @PathVariable String gameid) {
-    Game game = theGameService.getGame(gameid);
-    theGameService.getGame(gameid).setWordReveal(game.getWord());
+  public String revealWord(Model theModel, @PathVariable String gameid) {
+    Game game = gameService.getGame(gameid);
+    game.setWordReveal(game.getWord());
     return "redirect:/games/{gameid}";
   }
 }

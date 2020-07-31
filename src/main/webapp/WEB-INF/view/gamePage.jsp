@@ -7,7 +7,7 @@
 <head>
 <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/css/bootstrap.min.css">
 <link rel="stylesheet" type="text/css"
-    href="${pageContext.request.contextPath}/styles/gamePage.css">
+    href="${pageContext.request.contextPath}/css/gamePage.css">
 <title>Hangman</title>
 </head>
 <body>

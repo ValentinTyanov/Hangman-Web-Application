@@ -1,11 +1,11 @@
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
 
 <!DOCTYPE html>
-<html>
+<html lang="en">
 <head>
 <title> Victory </title>
 <link rel="stylesheet" type="text/css"
-    href="${pageContext.request.contextPath}/styles/game_end.css">
+    href="${pageContext.request.contextPath}/css/game_end.css">
 </head>
 <body>
 <div class="title">
