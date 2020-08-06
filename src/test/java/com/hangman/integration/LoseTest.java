@@ -38,8 +38,8 @@ public class LoseTest extends DriverLifeCycleManagement {
     Set<Character> alphabet =
         new HashSet<>(
             Arrays.asList(
-                'a', 'b', 'c', 'd', 'e', 'f', 'g', 'h', 'i', 'j', 'k', 'l', 'm', 'n', 'o', 'p', 'q',
-                'r', 's', 't', 'u', 'v', 'w', 'x', 'y', 'z'));
+                'a', 'b', 'c', 'd', 'e', 'f', 'g', 'h', 'i', 'j', 'k', 'm', 'n', 'o', 'p', 'q', 'r',
+                's', 't', 'u', 'v', 'w', 'x', 'y', 'z'));
 
     Set<Character> correctLetters = new HashSet<>();
     IntStream.range(0, actualWord.length())

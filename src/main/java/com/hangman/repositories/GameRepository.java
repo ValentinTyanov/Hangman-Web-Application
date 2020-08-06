@@ -1,13 +1,21 @@
 package com.hangman.repositories;
 
 import com.hangman.entities.Game;
-import java.util.function.Predicate;
+import java.util.List;
 
 public interface GameRepository {
 
-  public Game getGame(String id);
+  public List<Game> findAll();
 
-  public void addGame(Game game);
+  public Game findById(String id);
 
-  public boolean exists(Predicate<Game> pred);
+  public void create(Game game);
+
+  public void update(Game game);
+
+  public void deleteById(String id);
+
+  boolean hasSolvedPuzzle(String id);
+
+  boolean hasFailedPuzzle(String id);
 }

@@ -1,13 +1,14 @@
 package com.hangman.services;
 
-import static org.assertj.core.api.Assertions.*;
-
+import static org.assertj.core.api.Assertions.assertThat;
 import static org.mockito.ArgumentMatchers.anyString;
 import static org.mockito.Mockito.when;
 import com.hangman.entities.Game;
+import com.hangman.entities.UnusedLetter;
 import com.hangman.repositories.GameRepository;
-import java.util.Arrays;
-import java.util.HashSet;
+import com.hangman.repositories.UnusedLetterRepositoryImpl;
+import java.util.ArrayList;
+import java.util.List;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
@@ -19,6 +20,7 @@ public class GameServiceTests {
 
   @Mock GameRepository gameRepository;
   @Mock WordService wordService;
+  @Mock UnusedLetterRepositoryImpl unusedLetterRepository;
   @InjectMocks public GameServiceImpl gameService;
 
   @Test
@@ -38,60 +40,35 @@ public class GameServiceTests {
   }
 
   @Test
-  public void shouldNotBeEmptyOriginalLetterListAfterFill() {
-    Game game = new Game();
-    game.setWord("Bacteria");
-    gameService.fillLetterLists(game);
-    assertThat(game.getOriginalLettersList()).isNotEmpty();
-  }
-
-  @Test
-  public void shouldNotContainUnderscoreInOriginalLetterListAfterFill() {
-    Game game = new Game();
-    game.setWord("Hospital");
-    gameService.fillLetterLists(game);
-    assertThat(game.getOriginalLettersList()).doesNotContain('_');
-  }
-
-  @Test
-  public void shouldNotBeEmptyHiddenLetterListAfterFill() {
+  public void shouldNotBeEmptyWordInProgressAfterSetup() {
     Game game = new Game();
     game.setWord("Patriarchy");
-    gameService.fillLetterLists(game);
-    assertThat(game.getHiddenLettersList()).isNotEmpty();
+    gameService.setupWordInProgress(game);
+    assertThat(game.getWordInProgress()).isNotNull();
   }
 
   @Test
-  public void shouldInitiallyContainUnderscoreInHiddenLetterListAfterFill() {
+  public void shouldInitiallyContainUnderscoreWordInProgressAfterSetup() {
     Game game = new Game();
     game.setWord("Pestilence");
-    gameService.fillLetterLists(game);
-    assertThat(game.getHiddenLettersList()).contains('_');
+    gameService.setupWordInProgress(game);
+    assertThat(game.getWordInProgress()).contains("_");
   }
 
   @Test
-  public void shouldReduceAttemptsAfterCorrectTryLetter() {
+  public void shouldReduceAttemptsAfterTryLetter() {
     Game game = new Game();
     game.setWord("Quicksort");
     String word = game.getWord();
     game.setAttemptsLeft(word.length());
-    gameService.fillLetterLists(game);
-    game.setUnusedLetters(new HashSet<Character>('t'));
-    when(gameService.getGame(anyString())).thenReturn(game);
+    gameService.setupWordInProgress(game);
+    List<UnusedLetter> letterList = new ArrayList<UnusedLetter>();
+    UnusedLetter unusedLetter = new UnusedLetter('t');
+    unusedLetter.setGame(game);
+    letterList.add(unusedLetter);
+    game.setUnusedLetters(letterList);
+    when(gameRepository.findById(anyString())).thenReturn(game);
     gameService.tryLetter("asd123", 't');
-    assertThat(game.getAttemptsLeft()).isEqualTo(word.length() - 1);
-  }
-
-  @Test
-  public void shouldReduceAttempts_v2_AfterWrongTryLetter() {
-    Game game = new Game();
-    game.setWord("Quicksort");
-    String word = game.getWord();
-    game.setAttemptsLeft(word.length());
-    gameService.fillLetterLists(game);
-    game.setUnusedLetters(new HashSet<Character>('t'));
-    when(gameService.getGame(anyString())).thenReturn(game);
-    gameService.tryLetter("asd123", 'v');
     assertThat(game.getAttemptsLeft()).isEqualTo(word.length() - 1);
   }
 
@@ -101,10 +78,17 @@ public class GameServiceTests {
     game.setWord("Quicksort");
     String word = game.getWord();
     game.setAttemptsLeft(word.length());
-    gameService.fillLetterLists(game);
-    game.setUnusedLetters(new HashSet<Character>(Arrays.asList('r', 't')));
-    when(gameService.getGame(anyString())).thenReturn(game);
-    gameService.tryLetter("asd123", 't');
+    gameService.setupWordInProgress(game);
+    List<UnusedLetter> letterList = new ArrayList<UnusedLetter>();
+    UnusedLetter letterOne = new UnusedLetter('v');
+    UnusedLetter letterTwo = new UnusedLetter('o');
+    letterOne.setGame(game);
+    letterTwo.setGame(game);
+    letterList.add(letterOne);
+    letterList.add(letterTwo);
+    game.setUnusedLetters(letterList);
+    when(gameService.findById(anyString())).thenReturn(game);
+    gameService.tryLetter("asd123", 'o');
     assertThat(game.getUnusedLetters().size()).isEqualTo(1);
   }
 }

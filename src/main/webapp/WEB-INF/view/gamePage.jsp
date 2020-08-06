@@ -18,19 +18,15 @@
 			<br/>
 		<p> Guess the word! </p>
 			<br/>
-		<div class="hiddenWord">
-			<c:set var="myLetters" value="${game.hiddenLettersList}"/>
-			<c:forEach var="letter" items="${myLetters}">
-				<c:out value="${letter}"/>
-			</c:forEach>
-			<br/>
-			<br/>
-		</div>
+		<div class="hiddenWord"> ${game.wordInProgress} </div>
+		<br/>
+		<br/>
 		<p>Attempts left: ${game.attemptsLeft}</p>
 		<br/>
 		<div class="cheat">
-			<form class="cheatButton" method="POST" action="${game.id}/real-word">
-				<button type="submit" class="btn btn-success">${game.wordReveal}</button>
+			<form class="cheatButton" method="POST" action="${game.id}/real-word">	
+			<c:set var="revealButton" scope="request" value="${game.revealWord}"/>		
+				<button type="submit" class="btn btn-success">${revealButton ? game.word : 'Reveal Word'}</button>
 			</form>
 		</div>
 
@@ -38,7 +34,7 @@
 			<form class="buttons" method="POST">
 				<c:set var="alphabet" value="${game.unusedLetters}"/>
 				<c:forEach var="unusedLetter" items="${alphabet}">
-					<input type="submit" name="letter" value="${unusedLetter}"/>
+					<input type="submit" name="letter" value="${unusedLetter.letter}"/>
 				</c:forEach>
 			</form>
 		</div>

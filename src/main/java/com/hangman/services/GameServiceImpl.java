@@ -1,114 +1,155 @@
 package com.hangman.services;
 
 import com.hangman.entities.Game;
+
+import com.hangman.entities.UnusedLetter;
 import com.hangman.repositories.GameRepository;
+import com.hangman.repositories.UnusedLetterRepositoryImpl;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 import java.util.UUID;
-import java.util.function.Predicate;
 import java.util.stream.IntStream;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 @Service
 public class GameServiceImpl implements GameService {
 
   private WordService wordService;
   private GameRepository gameRepository;
+  private UnusedLetterRepositoryImpl unusedLetterRepository;
 
   @Autowired
-  public GameServiceImpl(WordService wordService, GameRepository gameRepository) {
+  public GameServiceImpl(
+      WordService wordService,
+      GameRepository gameRepository,
+      UnusedLetterRepositoryImpl unusedLetterRepository) {
     this.wordService = wordService;
     this.gameRepository = gameRepository;
+    this.unusedLetterRepository = unusedLetterRepository;
   }
 
   @Override
+  @Transactional
   public String createGame() {
     Game game = new Game();
     game.setWord(wordService.generateWord());
+    setupWordInProgress(game);
+
     game.setAttemptsLeft(game.getWord().length());
     game.setId(UUID.randomUUID().toString());
-    fillLetterLists(game);
+    setupUnusedLetters(game);
+
+    gameRepository.create(game);
+    return game.getId();
+  }
+
+  public void setupWordInProgress(Game game) {
+    String word = game.getWord();
+    char fc = word.charAt(0);
+    char lc = word.charAt(word.length() - 1);
+
+    StringBuilder wordString = new StringBuilder();
+    wordString.append(fc);
+
+    for (int i = 1; i < word.length() - 1; i++) {
+      char currentLetter = word.charAt(i);
+      char outputChar =
+          currentLetter == Character.toLowerCase(fc) || currentLetter == lc ? currentLetter : '_';
+      wordString.append(outputChar);
+    }
+    wordString.append(lc);
+    game.setWordInProgress(wordString.toString());
+  }
+
+  public void setupUnusedLetters(Game game) {
     Set<Character> alphabet =
         new HashSet<>(
             Arrays.asList(
                 'a', 'b', 'c', 'd', 'e', 'f', 'g', 'h', 'i', 'j', 'k', 'l', 'm', 'n', 'o', 'p', 'q',
                 'r', 's', 't', 'u', 'v', 'w', 'x', 'y', 'z'));
+
     String word = game.getWord().toLowerCase();
     alphabet.remove(word.charAt(0));
     alphabet.remove(word.charAt(word.length() - 1));
-    game.setUnusedLetters(alphabet);
-    gameRepository.addGame(game);
-    return game.getId();
-  }
 
-  @Override
-  public void fillLetterLists(Game game) {
-    fillOriginalLetterList(game);
-    fillHiddenLetterList(game);
-  }
-
-  public void fillOriginalLetterList(Game game) {
-    List<Character> originalLetterList = new ArrayList<>();
-    String word = game.getWord();
-    IntStream.range(0, word.length()).forEach(index -> originalLetterList.add(word.charAt(index)));
-    game.setOriginalLettersList(originalLetterList);
-  }
-
-  public void fillHiddenLetterList(Game game) {
-    List<Character> hiddenLetterList = new ArrayList<>();
-    String word = game.getWord();
-    char fc = word.charAt(0);
-    char lc = word.charAt(word.length() - 1);
-    hiddenLetterList.add(fc);
-
-    for (int i = 1; i < word.length() - 1; i++) {
-      char currentLetter = game.getOriginalLettersList().get(i);
-      char outputChar = currentLetter == fc + 32 || currentLetter == lc ? currentLetter : '_';
-      hiddenLetterList.add(outputChar);
+    List<UnusedLetter> unusedLetters = new ArrayList<>();
+    for (Character letter : alphabet) {
+      UnusedLetter unusedLetter = new UnusedLetter(letter);
+      unusedLetter.setGame(game);
+      unusedLetters.add(unusedLetter);
     }
-    hiddenLetterList.add(lc);
-    game.setHiddenLettersList(hiddenLetterList);
+    game.setUnusedLetters(unusedLetters);
   }
 
   @Override
-  public Game getGame(String gameId) {
-    return gameRepository.getGame(gameId);
+  @Transactional
+  public Game findById(String gameId) {
+    return gameRepository.findById(gameId);
   }
 
   @Override
-  public void tryLetter(String id, char letter) {
-    Game game = getGame(id);
+  @Transactional
+  public void revealWord(String id) {
+    Game game = gameRepository.findById(id);
+    game.setRevealWord();
+  }
 
-    Character currentLetter =
-        game.getOriginalLettersList().stream().filter(l -> l == letter).findFirst().orElse(null);
+  @Override
+  @Transactional
+  public void tryLetter(String id, char clickedLetter) {
+    Game game = gameRepository.findById(id);
+    String originalWord = game.getWord();
 
-    // finds the indices where the letter resides in the word and stores them in an array
-    if (currentLetter != null) {
-      int[] indices =
-          IntStream.range(0, game.getOriginalLettersList().size())
-              .filter(index -> game.getOriginalLettersList().get(index).equals(currentLetter))
+    boolean wordContainsClickedLetter = originalWord.indexOf(clickedLetter) != -1;
+
+    if (wordContainsClickedLetter) {
+      int[] matchingLetterIndices =
+          IntStream.range(1, originalWord.length() - 1)
+              .filter(index -> originalWord.charAt(index) == clickedLetter)
               .toArray();
 
-      for (int index : indices) {
-        game.getHiddenLettersList().set(index, currentLetter);
+      String wordInProgress = game.getWordInProgress();
+      char[] wordInProgressChars = wordInProgress.toCharArray();
+
+      for (int index : matchingLetterIndices) {
+        wordInProgressChars[index] = clickedLetter;
       }
+      String updatedWord = String.valueOf(wordInProgressChars);
+      game.setWordInProgress(updatedWord);
     }
+    deleteClickedLetter(clickedLetter, game);
+
     game.setAttemptsLeft(game.getAttemptsLeft() - 1);
-    game.getUnusedLetters().remove(Character.valueOf(letter));
+    gameRepository.update(game);
   }
 
+  public void deleteClickedLetter(char clickedLetter, Game game) {
+    List<UnusedLetter> unusedLetters = game.getUnusedLetters();
+
+    UnusedLetter letterToRemove =
+        unusedLetters
+            .stream()
+            .filter(obj -> obj.getLetter() == clickedLetter)
+            .findFirst()
+            .orElse(null);
+
+    unusedLetterRepository.deleteById(letterToRemove.getId());
+  }
+
+  @Override
+  @Transactional
   public boolean solvedPuzzle(String id) {
-    Predicate<Game> isSolved =
-        g -> g.getId().equals(id) && !(g.getHiddenLettersList().contains('_'));
-    return gameRepository.exists(isSolved);
+    return gameRepository.hasSolvedPuzzle(id);
   }
 
+  @Override
+  @Transactional
   public boolean failedPuzzle(String id) {
-    Predicate<Game> hasFailed = g -> g.getId().equals(id) && g.getAttemptsLeft() <= 0;
-    return gameRepository.exists(hasFailed);
+    return gameRepository.hasFailedPuzzle(id);
   }
 }

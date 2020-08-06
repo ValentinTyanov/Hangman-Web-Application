@@ -6,9 +6,13 @@ public interface GameService {
 
   public String createGame();
 
-  public void fillLetterLists(Game game);
-
-  public Game getGame(String gameId);
+  public Game findById(String gameId);
 
   public void tryLetter(String gameId, char letter);
+
+  boolean solvedPuzzle(String id);
+
+  boolean failedPuzzle(String id);
+
+  void revealWord(String id);
 }

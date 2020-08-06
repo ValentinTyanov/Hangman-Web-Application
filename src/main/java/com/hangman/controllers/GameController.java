@@ -32,31 +32,30 @@ public class GameController {
     return "redirect:/games/" + gameId;
   }
 
-  @GetMapping("/games/{gameid}")
-  public String showGame(Model model, @PathVariable String gameid) {
-    Game game = gameService.getGame(gameid);
+  @GetMapping("/games/{gameId}")
+  public String showGame(Model model, @PathVariable String gameId) {
+    Game game = gameService.findById(gameId);
     model.addAttribute("game", game);
 
-    if (gameService.solvedPuzzle(gameid)) {
+    if (gameService.solvedPuzzle(gameId)) {
       return "victory";
     }
-    if (gameService.failedPuzzle(gameid)) {
+    if (gameService.failedPuzzle(gameId)) {
       return "gameOver";
     }
 
     return "gamePage";
   }
 
-  @PostMapping("/games/{gameid}")
-  public String tryLetter(Model theModel, @PathVariable String gameid, @RequestParam char letter) {
-    gameService.tryLetter(gameid, letter);
-    return "redirect:/games/{gameid}";
+  @PostMapping("/games/{gameId}")
+  public String tryLetter(Model theModel, @PathVariable String gameId, @RequestParam char letter) {
+    gameService.tryLetter(gameId, letter);
+    return "redirect:/games/{gameId}";
   }
 
-  @PostMapping("/games/{gameid}/real-word")
-  public String revealWord(Model theModel, @PathVariable String gameid) {
-    Game game = gameService.getGame(gameid);
-    game.setWordReveal(game.getWord());
-    return "redirect:/games/{gameid}";
+  @PostMapping("/games/{gameId}/real-word")
+  public String revealWord(Model theModel, @PathVariable String gameId) {
+    gameService.revealWord(gameId);
+    return "redirect:/games/{gameId}";
   }
 }

@@ -1,23 +1,45 @@
 package com.hangman.entities;
 
 import java.util.List;
-import java.util.Set;
+import javax.persistence.CascadeType;
+import javax.persistence.Column;
+import javax.persistence.Entity;
+import javax.persistence.Id;
+import javax.persistence.OneToMany;
+import javax.persistence.Table;
 
+@Entity
+@Table(name = "game")
 public class Game {
 
+  @Id
+  @Column(name = "id")
   private String id;
 
+  @Column(name = "attempts_left")
   private int attemptsLeft;
 
+  @Column(name = "word")
   private String word;
 
-  private List<Character> originalLetterList;
+  @Column(name = "word_reveal")
+  private boolean revealWord;
 
-  private List<Character> hiddenLetterList;
+  @Column(name = "word_in_progress")
+  private String wordInProgress;
 
-  private Set<Character> unusedLetters;
+  @OneToMany(
+      mappedBy = "game",
+      cascade = {CascadeType.PERSIST, CascadeType.DETACH, CascadeType.MERGE, CascadeType.REFRESH})
+  private List<UnusedLetter> unusedLetters;
 
-  private String wordReveal = "Reveal Word";
+  public Game() {}
+
+  public Game(String id, int attemptsLeft, String word) {
+    this.id = id;
+    this.attemptsLeft = attemptsLeft;
+    this.word = word;
+  }
 
   public String getId() {
     return id;
@@ -43,35 +65,27 @@ public class Game {
     this.word = word;
   }
 
-  public List<Character> getOriginalLettersList() {
-    return originalLetterList;
+  public boolean getRevealWord() {
+    return revealWord;
   }
 
-  public void setOriginalLettersList(List<Character> letters) {
-    this.originalLetterList = letters;
+  public void setRevealWord() {
+    this.revealWord = true;
   }
 
-  public List<Character> getHiddenLettersList() {
-    return hiddenLetterList;
+  public String getWordInProgress() {
+    return wordInProgress;
   }
 
-  public void setHiddenLettersList(List<Character> hiddenLetterList) {
-    this.hiddenLetterList = hiddenLetterList;
+  public void setWordInProgress(String wordInProgress) {
+    this.wordInProgress = wordInProgress;
   }
 
-  public Set<Character> getUnusedLetters() {
+  public List<UnusedLetter> getUnusedLetters() {
     return unusedLetters;
   }
 
-  public void setUnusedLetters(Set<Character> unusedLetters) {
+  public void setUnusedLetters(List<UnusedLetter> unusedLetters) {
     this.unusedLetters = unusedLetters;
-  }
-
-  public String getWordReveal() {
-    return wordReveal;
-  }
-
-  public void setWordReveal(String wordReveal) {
-    this.wordReveal = wordReveal;
   }
 }
