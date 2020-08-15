@@ -1,5 +1,6 @@
 package com.hangman.repositories;
 
+import com.hangman.entities.Game;
 import com.hangman.entities.UnusedLetter;
 import com.hangman.entities.UnusedLetter_;
 import java.util.List;
@@ -51,6 +52,15 @@ public class UnusedLetterRepositoryImpl implements LetterRepository<UnusedLetter
     CriteriaDelete<UnusedLetter> criteriaDelete = cb.createCriteriaDelete(UnusedLetter.class);
     Root<UnusedLetter> root = criteriaDelete.from(UnusedLetter.class);
     criteriaDelete = criteriaDelete.where(cb.equal(root.get(UnusedLetter_.id), id));
+    entityManager.createQuery(criteriaDelete).executeUpdate();
+  }
+
+  @Override
+  public void deleteAllLettersByGameId(Game game) {
+    CriteriaBuilder cb = entityManager.getCriteriaBuilder();
+    CriteriaDelete<UnusedLetter> criteriaDelete = cb.createCriteriaDelete(UnusedLetter.class);
+    Root<UnusedLetter> root = criteriaDelete.from(UnusedLetter.class);
+    criteriaDelete = criteriaDelete.where(cb.equal(root.get(UnusedLetter_.game), game));
     entityManager.createQuery(criteriaDelete).executeUpdate();
   }
 }

@@ -1,12 +1,15 @@
 package com.hangman.services;
 
 import com.hangman.entities.Game;
-
+import com.hangman.entities.GameStatistic;
+import com.hangman.entities.Ranking;
 import com.hangman.entities.UnusedLetter;
 import com.hangman.repositories.GameRepository;
+import com.hangman.repositories.RankingRepository;
 import com.hangman.repositories.UnusedLetterRepositoryImpl;
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Date;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
@@ -19,23 +22,30 @@ import org.springframework.transaction.annotation.Transactional;
 @Service
 public class GameServiceImpl implements GameService {
 
+  private RankingService rankingService;
   private WordService wordService;
   private GameRepository gameRepository;
   private UnusedLetterRepositoryImpl unusedLetterRepository;
+  private RankingRepository rankingRepository;
 
   @Autowired
   public GameServiceImpl(
       WordService wordService,
+      RankingService rankingService,
       GameRepository gameRepository,
-      UnusedLetterRepositoryImpl unusedLetterRepository) {
+      UnusedLetterRepositoryImpl unusedLetterRepository,
+      RankingRepository rankingRepository) {
+    this.rankingService = rankingService;
     this.wordService = wordService;
     this.gameRepository = gameRepository;
     this.unusedLetterRepository = unusedLetterRepository;
+    this.rankingRepository = rankingRepository;
   }
 
   @Override
   @Transactional
-  public String createGame() {
+  public String createGame(Ranking newRanking) {
+
     Game game = new Game();
     game.setWord(wordService.generateWord());
     setupWordInProgress(game);
@@ -44,6 +54,24 @@ public class GameServiceImpl implements GameService {
     game.setId(UUID.randomUUID().toString());
     setupUnusedLetters(game);
 
+    String alias = newRanking.getAlias();
+    if (!alias.equals("")) {
+      GameStatistic gameStatistic = new GameStatistic();
+      Date date = new Date();
+      gameStatistic.setDate(date);
+
+      Ranking existingRanking = rankingRepository.findByAlias(alias);
+
+      if (null == existingRanking) {
+        gameStatistic.setRanking(newRanking);
+        game.setGameStatistic(gameStatistic);
+        rankingRepository.save(newRanking);
+      } else {
+        gameStatistic.setRanking(existingRanking);
+        game.setGameStatistic(gameStatistic);
+        rankingRepository.save(existingRanking);
+      }
+    }
     gameRepository.create(game);
     return game.getId();
   }
@@ -106,29 +134,33 @@ public class GameServiceImpl implements GameService {
     String originalWord = game.getWord();
 
     boolean wordContainsClickedLetter = originalWord.indexOf(clickedLetter) != -1;
-
     if (wordContainsClickedLetter) {
-      int[] matchingLetterIndices =
-          IntStream.range(1, originalWord.length() - 1)
-              .filter(index -> originalWord.charAt(index) == clickedLetter)
-              .toArray();
-
-      String wordInProgress = game.getWordInProgress();
-      char[] wordInProgressChars = wordInProgress.toCharArray();
-
-      for (int index : matchingLetterIndices) {
-        wordInProgressChars[index] = clickedLetter;
-      }
-      String updatedWord = String.valueOf(wordInProgressChars);
-      game.setWordInProgress(updatedWord);
+      updateWordInProgress(clickedLetter, game, originalWord);
     }
-    deleteClickedLetter(clickedLetter, game);
+    deleteClickedLetterButton(clickedLetter, game);
 
     game.setAttemptsLeft(game.getAttemptsLeft() - 1);
     gameRepository.update(game);
   }
 
-  public void deleteClickedLetter(char clickedLetter, Game game) {
+  private void updateWordInProgress(char clickedLetter, Game game, String originalWord) {
+    int[] matchingLetterIndices =
+        IntStream.range(1, originalWord.length() - 1)
+            .filter(index -> originalWord.charAt(index) == clickedLetter)
+            .toArray();
+
+    String wordInProgress = game.getWordInProgress();
+    char[] wordInProgressChars = wordInProgress.toCharArray();
+
+    for (int index : matchingLetterIndices) {
+      wordInProgressChars[index] = clickedLetter;
+    }
+
+    String updatedWord = String.valueOf(wordInProgressChars);
+    game.setWordInProgress(updatedWord);
+  }
+
+  public void deleteClickedLetterButton(char clickedLetter, Game game) {
     List<UnusedLetter> unusedLetters = game.getUnusedLetters();
 
     UnusedLetter letterToRemove =
@@ -143,13 +175,33 @@ public class GameServiceImpl implements GameService {
 
   @Override
   @Transactional
-  public boolean solvedPuzzle(String id) {
-    return gameRepository.hasSolvedPuzzle(id);
+  public boolean solvedPuzzle(String id, Game game) {
+    boolean gameEnd = gameRepository.hasSolvedPuzzle(id);
+    setStatsIfEligible(id, game, gameEnd, true);
+    letterButtonsCleanUp(gameEnd, game);
+    return gameEnd;
   }
 
   @Override
   @Transactional
-  public boolean failedPuzzle(String id) {
-    return gameRepository.hasFailedPuzzle(id);
+  public boolean failedPuzzle(String id, Game game) {
+    boolean gameEnd = gameRepository.hasFailedPuzzle(id);
+    setStatsIfEligible(id, game, gameEnd, false);
+    letterButtonsCleanUp(gameEnd, game);
+    return gameEnd;
+  }
+
+  public void setStatsIfEligible(
+      String id, Game game, boolean gameEnd, boolean invokedFromSolvedPuzzle) {
+    boolean hasAlias = null != game.getGameStatistic();
+    if (hasAlias && gameEnd) {
+      rankingService.setStats(id, invokedFromSolvedPuzzle);
+    }
+  }
+
+  public void letterButtonsCleanUp(boolean gameEnd, Game game) {
+    if (gameEnd) {
+      unusedLetterRepository.deleteAllLettersByGameId(game);
+    }
   }
 }

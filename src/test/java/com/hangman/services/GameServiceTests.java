@@ -26,7 +26,7 @@ public class GameServiceTests {
   @Test
   public void shouldSuccessfullyCreateGameAndReturnGameId() {
     when(wordService.generateWord()).thenReturn("Arson");
-    String gameId = gameService.createGame();
+    String gameId = gameService.createGame(null);
     assertThat(gameId).isNotNull();
   }
 

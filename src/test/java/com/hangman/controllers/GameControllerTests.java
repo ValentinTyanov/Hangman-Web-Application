@@ -53,7 +53,7 @@ public class GameControllerTests {
 
   @Test
   public void shouldRetrieveGameAndShowGamePage() throws Exception {
-    String gameId = gameService.createGame();
+    String gameId = gameService.createGame(null);
 
     ResultMatcher ok = MockMvcResultMatchers.status().isOk();
 

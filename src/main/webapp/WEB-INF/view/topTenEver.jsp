@@ -1,20 +1,20 @@
-<%@ page contentType="text/html;charset=UTF-8" language="java" %>
+<%@ page contentType="text/html;charset=UTF-8" language="java" %> 
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
-<title> Victory </title>
+<title>Ranking</title>
 <link rel="stylesheet" type="text/css"
-    href="${pageContext.request.contextPath}/css/game_end.css">
+    href="${pageContext.request.contextPath}/css/ranking.css">
 </head>
 <body>
-<div class="title">
-		<h1> You won! </h1>
-</div>
+	<div class="title">
+		<h1> Ranking </h1>
+	</div>
 
 <form class="rankingType" method="POST" action="/ranking">
-Top 10 All-time <input type="checkbox" name="choice" value="all-time" onchange="this.form.submit()">
 Top 10 Last 30 Days <input type="checkbox" name="choice" value="lastMonth" onchange="this.form.submit()">      
 </form>
 
@@ -32,13 +32,13 @@ Top 10 Last 30 Days <input type="checkbox" name="choice" value="lastMonth" oncha
 				</tr>
 			</c:forEach>
 		</table>
-</div>
+ </div>
 
-
+<!--  mapping here might not work-->
 <div class="bottom">
-		<form class="startGame" action ="/">
-			<input type="submit" value="Start New Game"/>
+		<form class="startGame" action="/">
+			<input type="submit" value="Home"/>
 		</form>
-	</div>
+</div>
 </body>
 </html>

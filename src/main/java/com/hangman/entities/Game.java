@@ -5,7 +5,9 @@ import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.Id;
+import javax.persistence.JoinColumn;
 import javax.persistence.OneToMany;
+import javax.persistence.OneToOne;
 import javax.persistence.Table;
 
 @Entity
@@ -28,9 +30,13 @@ public class Game {
   @Column(name = "word_in_progress")
   private String wordInProgress;
 
+  @OneToOne(cascade = CascadeType.ALL)
+  @JoinColumn(name = "game_statistic_id")
+  private GameStatistic gameStatistic;
+
   @OneToMany(
       mappedBy = "game",
-      cascade = {CascadeType.PERSIST, CascadeType.DETACH, CascadeType.MERGE, CascadeType.REFRESH})
+      cascade = {CascadeType.ALL})
   private List<UnusedLetter> unusedLetters;
 
   public Game() {}
@@ -79,6 +85,14 @@ public class Game {
 
   public void setWordInProgress(String wordInProgress) {
     this.wordInProgress = wordInProgress;
+  }
+
+  public GameStatistic getGameStatistic() {
+    return gameStatistic;
+  }
+
+  public void setGameStatistic(GameStatistic gameStatistic) {
+    this.gameStatistic = gameStatistic;
   }
 
   public List<UnusedLetter> getUnusedLetters() {

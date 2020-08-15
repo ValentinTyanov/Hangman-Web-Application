@@ -1,5 +1,16 @@
+body {
+	background-color: black;
+}
+
+.title {
+	color: #00FF00;
+	font-size: 25px;
+	text-align: center;
+	width: 100%;
+	font-family: Arial;
+}
+
 input[type=submit] {
-	margin: 5px 5px auto;
 	padding:25px 35px;
 	border: 5px solid #00FF00;
     cursor:pointer;
@@ -8,10 +19,18 @@ input[type=submit] {
     color: #00FF00;
     font-family: Arial;
     font-size: 30px;
-    
 }
 
-.title {
+.bottom {
+	text-align: center;
+	margin: 40px 0px 0px 0px;
+}
+
+input[type=submit]:hover {
+	color: yellow;
+}
+
+p {
 	color: #00FF00;
 	font-size: 30px;
 	text-align: center;
@@ -19,23 +38,48 @@ input[type=submit] {
 	font-family: Arial;
 }
 
-body {
-	background-color: black;
+.textField {
+	font-size: 25px;
 }
 
-p {
+.table {
+	position: fixed;
+    top: 15%;
+    right: 25%; 
+    width: 50%;
+	border: 5px solid #00FF00;
+    border-radius: 10px;
+	position:absolute; 
 	color: #00FF00;
 	font-size: 25px;
 	text-align: center;
-	width: 100%;
-	font-family: Arial;
+	font-family: Arial;	
 }
 
-.button {
-	margin: 480px 0px 0px 0px;
+table th {
+  padding-left: 15px;
+  padding-top: 12px;
+  padding-bottom: 12px;
+  font-size: 30px;
+  text-align: center;
+  color: #00FF00;
+}
+
+table td {
+	padding-left: 10px;
+	padding-bottom: 12px;
 	text-align: center;
 }
 
-input[type=submit]:hover {
-	color: yellow;
+.scoreCell {
+	padding-right: 12px;
+}
+
+.rankingType {
+	color: #00FF00;
+	font-size: 20px;
+	font-family: Arial;
+	text-align: center;
+	width: 100%;
+	margin: 580px 0px 0px 0px;
 }

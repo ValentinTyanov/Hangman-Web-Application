@@ -23,6 +23,7 @@ input[type=submit] {
 
 .bottom {
 	text-align: center;
+	margin: 40px 0px 0px 0px;
 }
 
 input[type=submit]:hover {
@@ -80,5 +81,5 @@ table td {
 	font-family: Arial;
 	text-align: center;
 	width: 100%;
-	margin: 550px 0px 0px 0px;
+	margin: 560px 0px 0px 0px;
 }

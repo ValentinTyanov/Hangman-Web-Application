@@ -1,5 +1,6 @@
 package com.hangman.repositories;
 
+import com.hangman.entities.Game;
 import java.util.List;
 
 public interface LetterRepository<T> {
@@ -13,4 +14,6 @@ public interface LetterRepository<T> {
   public void update(T letter);
 
   public void deleteById(int id);
+
+  void deleteAllLettersByGameId(Game game);
 }

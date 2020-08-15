@@ -1,0 +1,50 @@
+SET FOREIGN_KEY_CHECKS = 0;
+
+CREATE TABLE `game` (
+`id` VARCHAR(45),
+`attempts_left` INT,
+`word` VARCHAR(20) DEFAULT NULL,
+`word_reveal` VARCHAR(20) DEFAULT NULL,
+`word_in_progress` VARCHAR(20) DEFAULT NULL,
+`game_statistic_id` INT DEFAULT NULL,
+
+PRIMARY KEY (`id`),
+KEY `FK_STATISTIC_idx` (`game_statistic_id`),
+CONSTRAINT `FK_STATISTIC`
+FOREIGN KEY (`game_statistic_id`)
+REFERENCES `game_statistic` (`id`)
+) ENGINE=InnoDB DEFAULT CHARSET=latin1;
+
+
+CREATE TABLE `unused_letter` (
+`id` INT NOT NULL AUTO_INCREMENT,
+`letter` VARCHAR(1) DEFAULT NULL,
+`game_id` VARCHAR(45),
+
+PRIMARY KEY(`id`),
+KEY `FK_GAME_idx` (`game_id`),
+
+FOREIGN KEY (`game_id`)
+REFERENCES `game` (`id`)
+
+ON DELETE NO ACTION ON UPDATE NO ACTION
+) ENGINE=InnoDB AUTO_INCREMENT=1 DEFAULT CHARSET=latin1;
+
+
+CREATE TABLE `game_statistic` (
+  `id` INT NOT NULL AUTO_INCREMENT,
+  `alias` VARCHAR(20) DEFAULT NULL,
+  `score` INT DEFAULT NULL,
+  `ranking_id` INT DEFAULT NULL,
+
+PRIMARY KEY (`id`),
+KEY `FK_RANKING_idx` (`ranking_id`),
+CONSTRAINT `FK_RANKING`
+FOREIGN KEY (`ranking_id`)
+REFERENCES `ranking` (`id`)  
+) ENGINE=InnoDB AUTO_INCREMENT=1 DEFAULT CHARSET=latin1;
+
+
+CREATE TABLE `ranking` (
+`id` INT NOT NULL AUTO_INCREMENT PRIMARY KEY
+) ENGINE=InnoDB AUTO_INCREMENT=1 DEFAULT CHARSET=latin1;
