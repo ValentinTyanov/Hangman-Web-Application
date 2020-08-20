@@ -1,15 +1,15 @@
-package com.hangman.services;
+package com.hangman.service;
 
-import com.hangman.entities.Game;
-import com.hangman.entities.GameStatistic;
-import com.hangman.entities.Ranking;
-import com.hangman.entities.UnusedLetter;
-import com.hangman.repositories.GameRepository;
-import com.hangman.repositories.RankingRepository;
-import com.hangman.repositories.UnusedLetterRepositoryImpl;
+import com.hangman.model.Game;
+import com.hangman.model.GameStatistic;
+import com.hangman.model.Ranking;
+import com.hangman.model.UnusedLetter;
+import com.hangman.repository.GameRepository;
+import com.hangman.repository.RankingRepository;
+import com.hangman.repository.UnusedLetterRepositoryImpl;
+import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.Arrays;
-import java.util.Date;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
@@ -57,8 +57,8 @@ public class GameServiceImpl implements GameService {
     String alias = newRanking.getAlias();
     if (!alias.equals("")) {
       GameStatistic gameStatistic = new GameStatistic();
-      Date date = new Date();
-      gameStatistic.setDate(date);
+      LocalDate gameDate = LocalDate.now();
+      gameStatistic.setGameDate(gameDate);
 
       Ranking existingRanking = rankingRepository.findByAlias(alias);
 

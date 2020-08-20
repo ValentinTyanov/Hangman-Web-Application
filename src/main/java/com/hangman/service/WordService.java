@@ -1,4 +1,4 @@
-package com.hangman.services;
+package com.hangman.service;
 
 public interface WordService {
   String generateWord();

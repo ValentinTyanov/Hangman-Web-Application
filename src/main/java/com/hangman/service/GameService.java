@@ -1,7 +1,7 @@
-package com.hangman.services;
+package com.hangman.service;
 
-import com.hangman.entities.Game;
-import com.hangman.entities.Ranking;
+import com.hangman.model.Game;
+import com.hangman.model.Ranking;
 
 public interface GameService {
 

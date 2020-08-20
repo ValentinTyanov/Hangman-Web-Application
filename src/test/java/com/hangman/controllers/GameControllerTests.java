@@ -1,7 +1,7 @@
 package com.hangman.controllers;
 
 import com.hangman.HangmanApplication;
-import com.hangman.services.GameService;
+import com.hangman.service.GameService;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.junit.jupiter.api.BeforeEach;

@@ -1,4 +1,4 @@
-package com.hangman.entities;
+package com.hangman.model;
 
 import java.util.List;
 import javax.persistence.CascadeType;

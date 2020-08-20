@@ -1,7 +1,7 @@
-package com.hangman.entities;
+package com.hangman.model;
 
 import com.fasterxml.jackson.annotation.JsonFormat;
-import java.util.Date;
+import java.time.LocalDate;
 import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
@@ -12,8 +12,6 @@ import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import javax.persistence.OneToOne;
 import javax.persistence.Table;
-import javax.persistence.Temporal;
-import javax.persistence.TemporalType;
 
 @Entity
 @Table(name = "game_statistic")
@@ -31,9 +29,8 @@ public class GameStatistic {
   private boolean hasUsedHint;
 
   @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd")
-  @Temporal(TemporalType.TIMESTAMP)
   @Column(name = "game_date")
-  private Date date;
+  private LocalDate gameDate;
 
   @OneToOne(
       mappedBy = "gameStatistic",
@@ -68,12 +65,12 @@ public class GameStatistic {
     this.hasUsedHint = hasUsedHint;
   }
 
-  public Date getDate() {
-    return date;
+  public LocalDate getGameDate() {
+    return gameDate;
   }
 
-  public void setDate(Date date) {
-    this.date = date;
+  public void setGameDate(LocalDate gameDate) {
+    this.gameDate = gameDate;
   }
 
   public Game getGame() {

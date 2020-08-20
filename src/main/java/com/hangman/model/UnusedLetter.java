@@ -1,4 +1,4 @@
-package com.hangman.entities;
+package com.hangman.model;
 
 import javax.persistence.CascadeType;
 import javax.persistence.Column;

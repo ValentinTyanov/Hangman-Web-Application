@@ -1,4 +1,4 @@
-package com.hangman.repositories;
+package com.hangman.repository;
 
 import javax.persistence.criteria.CriteriaBuilder;
 import javax.persistence.criteria.CriteriaQuery;

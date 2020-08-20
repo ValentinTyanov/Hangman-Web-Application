@@ -1,8 +1,8 @@
-package com.hangman.repositories;
+package com.hangman.repository;
 
-import com.hangman.entities.Game;
-import com.hangman.entities.UnusedLetter;
-import com.hangman.entities.UnusedLetter_;
+import com.hangman.model.UnusedLetter_;
+import com.hangman.model.Game;
+import com.hangman.model.UnusedLetter;
 import java.util.List;
 import javax.persistence.EntityManager;
 import javax.persistence.criteria.CriteriaBuilder;

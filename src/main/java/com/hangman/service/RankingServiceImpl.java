@@ -1,14 +1,14 @@
-package com.hangman.services;
+package com.hangman.service;
 
-import com.hangman.entities.Game;
-import com.hangman.entities.GameStatistic;
-import com.hangman.entities.Ranking;
-import com.hangman.repositories.GameRepository;
-import com.hangman.repositories.GameStatisticRepository;
-import com.hangman.repositories.GameStatisticSpecifications;
-import com.hangman.repositories.RankingRepository;
-import java.util.Calendar;
-import java.util.Date;
+import com.hangman.model.Game;
+import com.hangman.model.GameStatistic;
+import com.hangman.model.Ranking;
+import com.hangman.repository.GameRepository;
+import com.hangman.repository.GameStatisticRepository;
+import com.hangman.repository.GameStatisticSpecifications;
+import com.hangman.repository.RankingRepository;
+import java.time.LocalDate;
+import java.util.Iterator;
 import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
@@ -68,10 +68,7 @@ public class RankingServiceImpl implements RankingService {
 
   @Transactional
   public Map<String, GameStatistic> getTopTenLastMonth() {
-    Calendar cal = Calendar.getInstance();
-    cal.add(Calendar.DATE, -30);
-    Date monthAgo = new Date(cal.getTimeInMillis());
-
+    LocalDate monthAgo = LocalDate.now().minusDays(30);
     List<GameStatistic> scoresFromLast30Days =
         gameStatisticRepository.findAll(GameStatisticSpecifications.highScoresSince(monthAgo));
 
@@ -79,21 +76,14 @@ public class RankingServiceImpl implements RankingService {
   }
 
   public Map<String, GameStatistic> top10DistinctPlayers(List<GameStatistic> scoresFromLast30Days) {
-    Map<String, GameStatistic> distinctPlayerScoresFromLast30Days = new LinkedHashMap<>();
-
-    for (GameStatistic gameStatistic : scoresFromLast30Days) {
-      String alias = gameStatistic.getRanking().getAlias();
-      distinctPlayerScoresFromLast30Days.putIfAbsent(alias, gameStatistic);
-    }
-
     Map<String, GameStatistic> top10DistinctPlayerScoresFromLast30Days = new LinkedHashMap<>();
 
-    int count = 0;
-    for (Map.Entry<String, GameStatistic> entry : distinctPlayerScoresFromLast30Days.entrySet()) {
-      if (count++ == 10) {
-        break;
-      }
-      top10DistinctPlayerScoresFromLast30Days.put(entry.getKey(), entry.getValue());
+    Iterator<GameStatistic> iter = scoresFromLast30Days.iterator();
+
+    while (iter.hasNext() && top10DistinctPlayerScoresFromLast30Days.size() < 10) {
+      GameStatistic gameStatistic = iter.next();
+      String alias = gameStatistic.getRanking().getAlias();
+      top10DistinctPlayerScoresFromLast30Days.putIfAbsent(alias, gameStatistic);
     }
     return top10DistinctPlayerScoresFromLast30Days;
   }

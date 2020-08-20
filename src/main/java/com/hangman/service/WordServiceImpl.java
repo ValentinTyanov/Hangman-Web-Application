@@ -1,4 +1,4 @@
-package com.hangman.services;
+package com.hangman.service;
 
 import java.util.Random;
 import org.springframework.stereotype.Service;

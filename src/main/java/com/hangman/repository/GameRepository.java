@@ -1,6 +1,6 @@
-package com.hangman.repositories;
+package com.hangman.repository;
 
-import com.hangman.entities.Game;
+import com.hangman.model.Game;
 import java.util.List;
 
 public interface GameRepository {

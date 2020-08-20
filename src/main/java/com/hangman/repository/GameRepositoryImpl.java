@@ -1,7 +1,7 @@
-package com.hangman.repositories;
+package com.hangman.repository;
 
-import com.hangman.entities.Game;
-import com.hangman.entities.Game_;
+import com.hangman.model.Game_;
+import com.hangman.model.Game;
 import java.util.ArrayList;
 import java.util.List;
 import javax.persistence.EntityManager;

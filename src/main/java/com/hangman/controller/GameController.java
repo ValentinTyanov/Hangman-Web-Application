@@ -1,9 +1,9 @@
-package com.hangman.controllers;
+package com.hangman.controller;
 
-import com.hangman.entities.Game;
-import com.hangman.entities.Ranking;
-import com.hangman.services.GameServiceImpl;
-import com.hangman.services.RankingService;
+import com.hangman.model.Game;
+import com.hangman.model.Ranking;
+import com.hangman.service.GameServiceImpl;
+import com.hangman.service.RankingService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
