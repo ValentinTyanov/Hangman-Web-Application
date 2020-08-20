@@ -38,14 +38,14 @@ public class RankingServiceImpl implements RankingService {
     Game game = gameRepository.findById(id);
     int attemptsLeft = game.getAttemptsLeft();
     int score = victory ? attemptsLeft + 1 : attemptsLeft;
-    boolean hasUsedHint = game.getRevealWord();
+    boolean hasUsedHint = game.isWordReveal();
     if (!hasUsedHint && victory) {
       score += 2;
     }
 
     GameStatistic gameStatistic = game.getGameStatistic();
     gameStatistic.setScore(score);
-    gameStatistic.setHasUsedHint(hasUsedHint);
+    gameStatistic.setHint(hasUsedHint);
 
     updateHighScore(score, gameStatistic);
 

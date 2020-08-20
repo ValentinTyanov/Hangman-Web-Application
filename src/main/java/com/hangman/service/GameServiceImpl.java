@@ -107,7 +107,8 @@ public class GameServiceImpl implements GameService {
 
     List<UnusedLetter> unusedLetters = new ArrayList<>();
     for (Character letter : alphabet) {
-      UnusedLetter unusedLetter = new UnusedLetter(letter);
+      UnusedLetter unusedLetter = new UnusedLetter();
+      unusedLetter.setLetter(letter);
       unusedLetter.setGame(game);
       unusedLetters.add(unusedLetter);
     }
@@ -124,7 +125,7 @@ public class GameServiceImpl implements GameService {
   @Transactional
   public void revealWord(String id) {
     Game game = gameRepository.findById(id);
-    game.setRevealWord();
+    game.setWordReveal(true);
   }
 
   @Override

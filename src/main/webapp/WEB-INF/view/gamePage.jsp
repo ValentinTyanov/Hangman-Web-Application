@@ -25,7 +25,7 @@
 		<br/>
 		<div class="cheat">
 			<form class="cheatButton" method="POST" action="${game.id}/real-word">	
-			<c:set var="revealButton" scope="request" value="${game.revealWord}"/>		
+			<c:set var="revealButton" scope="request" value="${game.wordReveal}"/>		
 				<button type="submit" class="btn btn-success">${revealButton ? game.word : 'Reveal Word'}</button>
 			</form>
 		</div>

@@ -3,7 +3,6 @@ package com.hangman.model;
 import com.fasterxml.jackson.annotation.JsonFormat;
 import java.time.LocalDate;
 import javax.persistence.CascadeType;
-import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
@@ -11,25 +10,20 @@ import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import javax.persistence.OneToOne;
-import javax.persistence.Table;
+import lombok.Data;
 
 @Entity
-@Table(name = "game_statistic")
+@Data
 public class GameStatistic {
 
   @Id
   @GeneratedValue(strategy = GenerationType.IDENTITY)
-  @Column(name = "id")
   private int id;
 
-  @Column(name = "score")
   private int score;
-
-  @Column(name = "hint")
-  private boolean hasUsedHint;
+  private boolean hint;
 
   @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd")
-  @Column(name = "game_date")
   private LocalDate gameDate;
 
   @OneToOne(
@@ -40,52 +34,4 @@ public class GameStatistic {
   @ManyToOne(cascade = {CascadeType.REFRESH})
   @JoinColumn(name = "ranking_alias")
   private Ranking ranking;
-
-  public int getId() {
-    return id;
-  }
-
-  public void setId(int id) {
-    this.id = id;
-  }
-
-  public int getScore() {
-    return score;
-  }
-
-  public void setScore(int score) {
-    this.score = score;
-  }
-
-  public boolean isHasUsedHint() {
-    return hasUsedHint;
-  }
-
-  public void setHasUsedHint(boolean hasUsedHint) {
-    this.hasUsedHint = hasUsedHint;
-  }
-
-  public LocalDate getGameDate() {
-    return gameDate;
-  }
-
-  public void setGameDate(LocalDate gameDate) {
-    this.gameDate = gameDate;
-  }
-
-  public Game getGame() {
-    return game;
-  }
-
-  public void setGame(Game game) {
-    this.game = game;
-  }
-
-  public Ranking getRanking() {
-    return ranking;
-  }
-
-  public void setRanking(Ranking ranking) {
-    this.ranking = ranking;
-  }
 }
