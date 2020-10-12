@@ -1,5 +1,6 @@
 package com.hangman.model;
 
+import com.fasterxml.jackson.annotation.JsonBackReference;
 import com.fasterxml.jackson.annotation.JsonFormat;
 import java.time.LocalDate;
 import javax.persistence.CascadeType;
@@ -26,6 +27,7 @@ public class GameStatistic {
   @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd")
   private LocalDate gameDate;
 
+  @JsonBackReference
   @OneToOne(
       mappedBy = "gameStatistic",
       cascade = {CascadeType.DETACH, CascadeType.MERGE, CascadeType.PERSIST, CascadeType.REFRESH})

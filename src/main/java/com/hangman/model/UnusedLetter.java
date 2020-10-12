@@ -1,5 +1,6 @@
 package com.hangman.model;
 
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import javax.persistence.CascadeType;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
@@ -19,6 +20,7 @@ public class UnusedLetter {
 
   private char letter;
 
+  @JsonIgnoreProperties("unusedLetters")
   @ManyToOne(
       cascade = {CascadeType.PERSIST, CascadeType.DETACH, CascadeType.MERGE, CascadeType.REFRESH})
   @JoinColumn(name = "game_id")

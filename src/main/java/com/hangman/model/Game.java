@@ -1,5 +1,7 @@
 package com.hangman.model;
 
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
+import com.fasterxml.jackson.annotation.JsonManagedReference;
 import java.util.List;
 import javax.persistence.CascadeType;
 import javax.persistence.Entity;
@@ -21,10 +23,12 @@ public class Game {
   private boolean wordReveal;
   private String wordInProgress;
 
+  @JsonManagedReference
   @OneToOne(cascade = CascadeType.ALL)
   @JoinColumn(name = "game_statistic_id")
   private GameStatistic gameStatistic;
 
+  @JsonIgnoreProperties("game")
   @OneToMany(
       mappedBy = "game",
       cascade = {CascadeType.ALL})

@@ -1,6 +1,7 @@
 package com.hangman.services;
 
 import static org.assertj.core.api.Assertions.assertThat;
+
 import static org.mockito.ArgumentMatchers.anyString;
 import static org.mockito.Mockito.when;
 import com.hangman.model.Game;
@@ -24,13 +25,6 @@ public class GameServiceTests {
   @Mock WordService wordService;
   @Mock UnusedLetterRepositoryImpl unusedLetterRepository;
   @InjectMocks public GameServiceImpl gameService;
-
-  @Test
-  public void shouldSuccessfullyCreateGameAndReturnGameId() {
-    when(wordService.generateWord()).thenReturn("Arson");
-    String gameId = gameService.createGame(null);
-    assertThat(gameId).isNotNull();
-  }
 
   @Test
   public void shouldHaveAttemptsLeftEqualToWordLength() {
@@ -65,7 +59,8 @@ public class GameServiceTests {
     game.setAttemptsLeft(word.length());
     gameService.setupWordInProgress(game);
     List<UnusedLetter> letterList = new ArrayList<UnusedLetter>();
-    UnusedLetter unusedLetter = new UnusedLetter('t');
+    UnusedLetter unusedLetter = new UnusedLetter();
+    unusedLetter.setLetter('t');
     unusedLetter.setGame(game);
     letterList.add(unusedLetter);
     game.setUnusedLetters(letterList);
@@ -82,10 +77,12 @@ public class GameServiceTests {
     game.setAttemptsLeft(word.length());
     gameService.setupWordInProgress(game);
     List<UnusedLetter> letterList = new ArrayList<UnusedLetter>();
-    UnusedLetter letterOne = new UnusedLetter('v');
-    UnusedLetter letterTwo = new UnusedLetter('o');
+    UnusedLetter letterOne = new UnusedLetter();
+    UnusedLetter letterTwo = new UnusedLetter();
     letterOne.setGame(game);
+    letterOne.setLetter('v');
     letterTwo.setGame(game);
+    letterTwo.setLetter('o');
     letterList.add(letterOne);
     letterList.add(letterTwo);
     game.setUnusedLetters(letterList);

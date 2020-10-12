@@ -5,6 +5,7 @@ import com.hangman.model.GameStatistic;
 import com.hangman.model.Ranking;
 import com.hangman.model.UnusedLetter;
 import com.hangman.repository.GameRepository;
+import com.hangman.repository.GameStatisticRepository;
 import com.hangman.repository.RankingRepository;
 import com.hangman.repository.UnusedLetterRepositoryImpl;
 import java.time.LocalDate;
@@ -34,7 +35,8 @@ public class GameServiceImpl implements GameService {
       RankingService rankingService,
       GameRepository gameRepository,
       UnusedLetterRepositoryImpl unusedLetterRepository,
-      RankingRepository rankingRepository) {
+      RankingRepository rankingRepository,
+      GameStatisticRepository gameStatisticRepository) {
     this.rankingService = rankingService;
     this.wordService = wordService;
     this.gameRepository = gameRepository;
@@ -117,6 +119,19 @@ public class GameServiceImpl implements GameService {
 
   @Override
   @Transactional
+  public List<Game> getActiveGames() {
+    return gameRepository.findActiveGames();
+  }
+
+  @Override
+  @Transactional
+  public Game createJSONGame(Game game) {
+    gameRepository.create(game);
+    return game;
+  }
+
+  @Override
+  @Transactional
   public Game findById(String gameId) {
     return gameRepository.findById(gameId);
   }
@@ -130,7 +145,7 @@ public class GameServiceImpl implements GameService {
 
   @Override
   @Transactional
-  public void tryLetter(String id, char clickedLetter) {
+  public Game tryLetter(String id, char clickedLetter) {
     Game game = gameRepository.findById(id);
     String originalWord = game.getWord();
 
@@ -142,6 +157,7 @@ public class GameServiceImpl implements GameService {
 
     game.setAttemptsLeft(game.getAttemptsLeft() - 1);
     gameRepository.update(game);
+    return game;
   }
 
   private void updateWordInProgress(char clickedLetter, Game game, String originalWord) {
@@ -171,7 +187,9 @@ public class GameServiceImpl implements GameService {
             .findFirst()
             .orElse(null);
 
-    unusedLetterRepository.deleteById(letterToRemove.getId());
+    if (null != letterToRemove) {
+      unusedLetterRepository.deleteById(letterToRemove.getId());
+    }
   }
 
   @Override

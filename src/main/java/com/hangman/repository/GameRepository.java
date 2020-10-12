@@ -18,4 +18,6 @@ public interface GameRepository {
   boolean hasSolvedPuzzle(String id);
 
   boolean hasFailedPuzzle(String id);
+
+  List<Game> findActiveGames();
 }
