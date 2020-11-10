@@ -25,12 +25,13 @@ public class GameController {
     this.rankingService = rankingService;
   }
 
-  @GetMapping("/")
-  public String showPage(Model model) {
-    model.addAttribute("ranking", new Ranking());
-    model.addAttribute("rankingService", rankingService);
-    return "home";
-  }
+  // this was for the homePage.jsp
+  //  @GetMapping("/")
+  //  public String showPage(Model model) {
+  //    model.addAttribute("ranking", new Ranking());
+  //    model.addAttribute("rankingService", rankingService);
+  //    return "home";
+  //  }
 
   @PostMapping("/games")
   public String createGame(@ModelAttribute("ranking") Ranking ranking) {
@@ -45,10 +46,10 @@ public class GameController {
     model.addAttribute("rankingService", rankingService);
 
     if (gameService.solvedPuzzle(gameId, game)) {
-      return "victory";
+      return "redirect:/victory";
     }
     if (gameService.failedPuzzle(gameId, game)) {
-      return "gameOver";
+      return "redirect:/defeat";
     }
 
     return "gamePage";

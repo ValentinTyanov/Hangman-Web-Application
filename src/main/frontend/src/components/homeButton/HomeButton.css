@@ -1,0 +1,35 @@
+.HomeButton-Container {
+  width: 20%;
+  margin: 10px 0 0 770px;
+}
+
+.HomeButton-Button {
+  margin: 25px auto;
+  padding: 25px 35px;
+  text-align: center;
+  cursor: pointer;
+  border: 5px solid #00ff00;
+  border-radius: 5px;
+  color: #00ff00;
+  font-family: Arial;
+  font-size: 30px;
+  animation: glowing 4s infinite;
+}
+
+@keyframes glowing {
+  0% {
+    background-color: black;
+    box-shadow: 0 0 3px #00d200;
+  }
+
+  50% {
+    color: black;
+    background-color: #00ff00;
+    box-shadow: 0 0 5px #00ff00;
+  }
+
+  100% {
+    background-color: black;
+    box-shadow: 0 0 3px #00d200;
+  }
+}

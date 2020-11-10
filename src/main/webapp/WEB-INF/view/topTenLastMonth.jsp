@@ -14,7 +14,7 @@
 		<h1>Ranking</h1>
 	</div>
 
-<form class="rankingType" method="POST" action="/ranking"> <!-- should send you to /games/ranking  *not sure -->
+<form class="rankingType" method="POST" action="/ranking">
 Top 10 All-time <input type="checkbox" name="choice" value="all-time" onchange="this.form.submit()">    
 </form>
  
@@ -34,8 +34,6 @@ Top 10 All-time <input type="checkbox" name="choice" value="all-time" onchange="
 		</table>
 </div>
  
-
-<!--  mapping here might not work-->
 <div class="bottom">
 		<form class="startGame" action="/">
 			<input type="submit" value="Home"/>

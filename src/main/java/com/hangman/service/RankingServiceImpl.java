@@ -1,5 +1,6 @@
 package com.hangman.service;
 
+import com.hangman.assets.TemporaryRanking;
 import com.hangman.model.Game;
 import com.hangman.model.GameStatistic;
 import com.hangman.model.Ranking;
@@ -8,6 +9,7 @@ import com.hangman.repository.GameStatisticRepository;
 import com.hangman.repository.GameStatisticSpecifications;
 import com.hangman.repository.RankingRepository;
 import java.time.LocalDate;
+import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.LinkedHashMap;
 import java.util.List;
@@ -62,10 +64,12 @@ public class RankingServiceImpl implements RankingService {
     rankingRepository.save(ranking);
   }
 
+  @Override
   public List<Ranking> getTopTen() {
     return rankingRepository.findTop10ByOrderByHighScoreDesc();
   }
 
+  @Override
   @Transactional
   public Map<String, GameStatistic> getTopTenLastMonth() {
     LocalDate monthAgo = LocalDate.now().minusDays(30);
@@ -86,6 +90,23 @@ public class RankingServiceImpl implements RankingService {
       top10DistinctPlayerScoresFromLast30Days.putIfAbsent(alias, gameStatistic);
     }
     return top10DistinctPlayerScoresFromLast30Days;
+  }
+
+  @Override
+  public List<TemporaryRanking> getTopTenLastMonthAsList() {
+    Map<String, GameStatistic> topTenLastMonthMap = getTopTenLastMonth();
+    List<TemporaryRanking> getTopTenLastMonthRankings = new ArrayList<>();
+
+    for (Map.Entry<String, GameStatistic> entry : topTenLastMonthMap.entrySet()) {
+      TemporaryRanking tempRanking = new TemporaryRanking();
+      GameStatistic gameStatistic = entry.getValue();
+
+      tempRanking.setAlias(gameStatistic.getRanking().getAlias());
+      tempRanking.setHighScore(gameStatistic.getScore());
+      getTopTenLastMonthRankings.add(tempRanking);
+    }
+
+    return getTopTenLastMonthRankings;
   }
 
   @Override

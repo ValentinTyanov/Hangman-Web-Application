@@ -36,7 +36,7 @@ Top 10 Last 30 Days <input type="checkbox" name="choice" value="lastMonth" oncha
 
 
 <div class="bottom">
-		<form class="startGame" action ="/">
+		<form class="startGame" action="/">
 			<input type="submit" value="Start New Game"/>
 		</form>
 	</div>

@@ -12,7 +12,7 @@
 </head>
 <body>
 	<div class="title">
-		<h1> Hangman </h1>
+		<h1>Hangman</h1>
 	</div>
 	
 <div>

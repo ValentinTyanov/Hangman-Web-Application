@@ -19,7 +19,6 @@
 //  @WebMethod
 //  @WebResult(name = "ResponseMessage")
 //  public List<Ranking> getTopTenLastMonthRanking() {
-//    // TODO Auto-generated method stub
 //    return null;
 //  }
 //

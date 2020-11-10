@@ -15,7 +15,7 @@
 	</div>
 
 <form class="rankingType" method="POST" action="/ranking">
-Top 10 Last 30 Days <input type="checkbox" name="choice" value="lastMonth" onchange="this.form.submit()">      
+Top 10 Last 30 Days <input type="checkbox" name="choice" value="lastMonth" onchange="this.form.submit()"/>      
 </form>
 
 <div>
@@ -32,9 +32,8 @@ Top 10 Last 30 Days <input type="checkbox" name="choice" value="lastMonth" oncha
 				</tr>
 			</c:forEach>
 		</table>
- </div>
+</div>
 
-<!--  mapping here might not work-->
 <div class="bottom">
 		<form class="startGame" action="/">
 			<input type="submit" value="Home"/>

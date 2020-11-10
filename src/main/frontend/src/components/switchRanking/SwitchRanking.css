@@ -1,0 +1,15 @@
+.SwitchRanking-RankingType {
+  font-size: 20px;
+  font-family: Arial;
+  text-align: center;
+  width: 100%;
+  text-decoration: none;
+}
+
+.SwitchRanking-RankingType:hover {
+  font-size: 22px;
+}
+
+.SwitchRanking-Text {
+  color: #00ff00;
+}
