@@ -1,8 +1,10 @@
-import React, { useState, useEffect } from "react";
+// import React from "react";
+import React, { useEffect, useState } from "react";
 import axios from "axios";
 import SwitchRanking from "../switchRanking/SwitchRanking";
 import RankingTable from "../rankingTable/RankingTable";
 import HomeButton from "../homeButton/HomeButton";
+// import useTopTenEver from "../useTopTenEver/useTopTenEver";
 
 const TopTenEver = (props) => {
   const [topTenEver, setTopTenEver] = useState([]);
@@ -13,6 +15,11 @@ const TopTenEver = (props) => {
     });
   }, []);
 
+  // const [topTenEver, isError] = useTopTenEver();
+
+  // if (isError) {
+  //   return <div>Failed to load...</div>;
+  // }
   return (
     <>
       <RankingTable curState={topTenEver} />

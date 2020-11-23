@@ -2,7 +2,7 @@ package com.hangman.controller;
 
 import com.hangman.model.Game;
 import com.hangman.model.Ranking;
-import com.hangman.service.GameServiceImpl;
+import com.hangman.service.GameService;
 import com.hangman.service.RankingService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
@@ -16,11 +16,11 @@ import org.springframework.web.bind.annotation.RequestParam;
 @Controller
 public class GameController {
 
-  private GameServiceImpl gameService;
+  private GameService gameService;
   private RankingService rankingService;
 
   @Autowired
-  public GameController(GameServiceImpl gameService, RankingService rankingService) {
+  public GameController(GameService gameService, RankingService rankingService) {
     this.gameService = gameService;
     this.rankingService = rankingService;
   }
@@ -67,7 +67,7 @@ public class GameController {
     return "redirect:/games/{gameId}";
   }
 
-  @PostMapping("/games/{gameId}/real-word")
+  @GetMapping("/games/{gameId}/real-word")
   public String revealWord(@PathVariable String gameId) {
     gameService.revealWord(gameId);
     return "redirect:/games/{gameId}";

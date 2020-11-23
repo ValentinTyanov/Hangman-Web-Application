@@ -24,7 +24,7 @@
 		<p>Attempts left: ${game.attemptsLeft}</p>
 		<br/>
 		<div class="cheat">
-			<form class="cheatButton" method="POST" action="${game.id}/real-word">	
+			<form class="cheatButton" method="GET" action="../login/${game.id}">	
 			<c:set var="revealButton" scope="request" value="${game.wordReveal}"/>		
 				<button type="submit" class="btn btn-success">${revealButton ? game.word : 'Reveal Word'}</button>
 			</form>

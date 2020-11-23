@@ -1,0 +1,22 @@
+.Login-Email {
+  margin: 20px auto;
+  width: 20%;
+  text-align: center;
+}
+
+.Login-Password {
+  margin: 20px auto;
+  width: 20%;
+  text-align: center;
+}
+
+.Login-Page {
+  margin-top: 10%;
+  color: #00ff00;
+  font-size: 50px;
+}
+
+.Login-Error {
+  margin-top: 1%;
+  color: rgb(245, 50, 28);
+}

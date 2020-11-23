@@ -16,6 +16,8 @@ const Victory = React.lazy(() => import("./containers/victory/Victory"));
 
 const Defeat = React.lazy(() => import("./containers/defeat/Defeat"));
 
+const Login = React.lazy(() => import("./containers/login/Login"));
+
 const App = () => (
   <div className="App">
     <BrowserRouter>
@@ -50,6 +52,14 @@ const App = () => (
           render={() => (
             <Suspense fallback={<div>Loading...</div>}>
               <Defeat />
+            </Suspense>
+          )}
+        />
+        <Route
+          path="/login/:gameId"
+          render={() => (
+            <Suspense fallback={<div>Loading...</div>}>
+              <Login />
             </Suspense>
           )}
         />
