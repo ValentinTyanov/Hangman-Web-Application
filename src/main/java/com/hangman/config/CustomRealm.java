@@ -29,7 +29,7 @@ public class CustomRealm extends JdbcRealm {
     String email = userToken.getPrincipal().toString();
     String inputPassword = new String(userToken.getPassword());
 
-    User user = securityService.findByEmail(userToken.getPrincipal().toString());
+    User user = securityService.findByEmail(email);
 
     if (email.isEmpty() || user == null || !user.getPassword().equals(inputPassword)) {
       throw new AuthenticationException(INVALID_CREDENTIALS);
