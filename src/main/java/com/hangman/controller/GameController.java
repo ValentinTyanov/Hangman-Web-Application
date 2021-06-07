@@ -25,14 +25,6 @@ public class GameController {
     this.rankingService = rankingService;
   }
 
-  // this was for the homePage.jsp
-  //  @GetMapping("/")
-  //  public String showPage(Model model) {
-  //    model.addAttribute("ranking", new Ranking());
-  //    model.addAttribute("rankingService", rankingService);
-  //    return "home";
-  //  }
-
   @PostMapping("/games")
   public String createGame(@ModelAttribute("ranking") Ranking ranking) {
     String gameId = gameService.createGame(ranking);
