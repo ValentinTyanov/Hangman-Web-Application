@@ -1,13 +1,14 @@
 # Hangman Web Application
 
 ## Introduction
-This Hangman Web Application is a modern take on the classic word guessing game. Designed as a full-stack application, it demonstrates the integration of Spring Boot for backend services, ReactJS for a dynamic frontend, and MySQL for database management. This project is aimed at developers and educators who wish to explore the practical application of these technologies in a web environment.
+This Hangman Web Application is a modern take on the classic word guessing game. Designed as a full-stack application, it demonstrates the integration of Spring Boot for backend services, ReactJS for a dynamic frontend, MySQL for database management, and JSPs for server-side rendering.
 
 ## Technologies Used
 - **Spring Boot**: Simplifies the development of new Spring applications through various helpful defaults.
 - **Spring Data & Spring Web**: Facilitates the creation of RESTful services with comprehensive data handling.
 - **Apache Shiro**: Utilized for both UI and BASIC Authentication for RESTful Web Services.
 - **ReactJS**: Manages the stateful frontend presentation.
+- **JSP**: Used for server-side rendering of views, integrating seamlessly with Spring MVC.
 - **MySQL & JPA Hibernate**: Handles database operations.
 - **JUnit, AssertJ, Mockito**: For robust backend testing.
 - **Selenium WebDriver**: Ensures the reliability of integration tests.
