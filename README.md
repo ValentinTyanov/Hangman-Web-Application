@@ -27,12 +27,15 @@ These instructions will get you a copy of the project up and running on your loc
    git clone https://github.com/ValentinTyanov/hangman-web-application.git
    cd hangman-web-application
 2. Install NPM packages:
+   ```bash
    npm install
-3. Install Maven dependencies:
+4. Install Maven dependencies:
+   ```bash
    mvn install
 
 ### Usage
 To run the application, use the following Maven command:
+   ```bash
    mvn spring-boot:run
 
 Once the server starts, you can access the application by navigating to http://localhost:8080 in your web browser.
