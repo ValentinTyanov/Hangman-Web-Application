@@ -26,7 +26,7 @@ These instructions will get you a copy of the project up and running on your loc
    ```bash
    git clone https://github.com/ValentinTyanov/hangman-web-application.git
    cd hangman-web-application
-2.Install Maven dependencies:
+2. Install Maven dependencies:
    ```bash
    mvn install
 3. Install NPM packages:
